@@ -129,10 +129,4 @@ Console output clearly demonstrates correct behavior for each operation.
 
 ---
 
-## Author
-
-👤 Ani Pirosmanashvili — Computer Science
-📚 Data Structures & Algorithms
-
----
 
