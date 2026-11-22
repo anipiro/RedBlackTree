@@ -1,132 +1,60 @@
-# Red-Black Tree (C++) 🌳
+# Red-black tree
 
-## Overview
+A red-black tree of unique integers in C++, written for a university assignment, with a driver that checks it.
 
-This repository contains a **complete implementation of a Red-Black Tree** in **C++**.
-A Red-Black Tree is a self-balancing binary search tree that guarantees **O(log n)** time complexity for insertion, deletion, and search operations by maintaining strict coloring and structural properties.
+Identifiers and console messages are Georgian written in Latin letters, so the method table below gives the English meaning of each name.
 
-The project was developed as part of a university programming assignment and follows all required specifications, while also including additional validation and testing utilities. Since it was essential for me to use
-Georgian language throughout the whole project, most of the words are in Georgian instead of English.
+## What it does
 
----
+- **Insert.** `insert` walks down with a loop, `insertRecursive` does the same descent recursively. Both add the new node as red, then recolor and rotate. A value that is already in the tree is ignored.
+- **Delete.** `washla` removes a value and returns whether it was found. A node with two children is replaced by its in-order successor, and a fix-up pass runs when a black node was removed.
+- **Search.** `dzebna` and `iteraciisDzebna` both return `true` if the value is present. Both use the same iterative lookup.
+- **Traversals.** `preorder`, `inorder` and `postorder` print every node as `value(B)` or `value(R)`. `display` is the preorder print.
+- **Validation.** `validacia` checks that the root is black, that no red node has a red parent, and that every path from the root down has the same number of black nodes.
+- **Copying and cleanup.** The copy constructor and `operator=` make a deep copy, self-assignment is guarded, and the destructor and `clear` free every node.
 
-## Features
+## How it works
 
-✅ Iterative and recursive insertion
-✅ Full Red-Black Tree deletion with fix-up cases
-✅ Iterative and recursive search
-✅ Tree traversals (Preorder, Inorder, Postorder)
-✅ Deep copy support (copy constructor & assignment operator)
-✅ Proper memory management (destructor & clear)
-✅ Validation of Red-Black Tree properties
-✅ Comprehensive test driver
+`Node` holds the value, a `shavia` flag (true means black), pointers to the parent and both children, and a `marcxenaShvili` flag that says whether the node is its parent's left child. The rotations keep that flag up to date, so the fix-up code reads it instead of comparing pointers.
 
----
+There is no sentinel leaf. A null pointer counts as a black leaf, and the delete fix-up carries the parent of the removed position alongside the node so it can work when that node is null.
 
-## Project Structure
+| Method | Meaning | Cost |
+| --- | --- | --- |
+| `insert`, `insertRecursive` | insert | O(log n) |
+| `washla` | delete | O(log n) |
+| `dzebna`, `iteraciisDzebna` | search | O(log n) |
+| `validacia` | check the red-black rules | O(n) |
+| `size`, `height` | count nodes, count levels | O(n), computed by walking the tree |
+| `preorder`, `inorder`, `postorder`, `clear` | print or free all nodes | O(n) |
+
+`validacia` checks colors and black counts only. It does not check that the keys are in search-tree order.
+
+Known issue: when the deleted node is black, has no children and is its parent's right child, the fix-up treats the empty position as a left child and stops without recoloring. The tree keeps its ordering but its black counts no longer match, so `validacia` returns `false` afterwards. `Driver.cpp` does not cover this case.
+
+## Example
+
+From the delete test in `Driver.cpp`:
+
+```cpp
+RedBlackTree tree;
+int values[] = { 50, 30, 70, 20, 40, 60, 80 };
+for (int i = 0; i < 7; i++) tree.insert(values[i]);
+
+tree.display();        // preorder print
+tree.washla(20);       // delete 20
+tree.display();
+
+bool passed = !tree.dzebna(20) && tree.size() == 6 && tree.validacia();
+```
+
+`Driver.cpp` runs eight checks like this one: an empty tree, several inserts, search, delete, the copy constructor, assignment, self-assignment, and 20 inserts followed by 5 deletes. It prints `Imushava` (passed) or `Ver imushava` (failed) for each, then the number of checks passed.
+
+## Build and run
+
+The repository is a Visual Studio solution: open `RedBlackTree.slnx` and run it. With g++:
 
 ```
-├── Node.h              # Node class definition
-├── RedBlackTree.h      # RedBlackTree class declaration
-├── RedBlackTree.cpp    # RedBlackTree implementation
-├── Driver.cpp          # Test cases
-└── README.md           # Project documentation
+g++ -std=c++17 RedBlackTree/Driver.cpp RedBlackTree/RedBlackTree.cpp -o rbt
+./rbt
 ```
-## Node Structure
-
-Each node stores:
-
-* `value` – integer key
-* `color` – red or black
-* `parent` pointer
-* `left` child pointer
-* `right` child pointer
-* metadata indicating left/right child relationship
-
-The `RedBlackTree` class is declared as a friend to allow controlled access to node internals.
-
----
-
-## Supported Operations
-
-### Insertion
-
-* New nodes are inserted as red
-* Tree is rebalanced using recoloring and rotations
-* Root is always enforced as black
-
-### Deletion
-
-* Handles all standard Red-Black Tree deletion cases
-* Uses successor replacement for nodes with two children
-* Includes full fix-up logic when removing black nodes
-
-### Search
-
-* Available in both iterative and recursive forms
-* Follows standard binary search tree traversal rules
-
-### Traversals
-
-* Preorder
-* Inorder
-* Postorder
-
-Traversal output includes both **node value and color**.
-
----
-
-## Validation Utilities
-
-The implementation includes a validation function that ensures:
-
-* The root node is black
-* No two red nodes appear consecutively
-* All root-to-leaf paths contain the same number of black nodes
-
-Additional helpers:
-
-* `size()` – number of nodes
-* `height()` – height of the tree
-* `clear()` – deallocates all nodes
-
----
-
-## Testing
-
-All functionality is tested in `Driver.cpp`, including:
-
-* Multiple insertions
-* Searches
-* Deletions
-* Copy constructor behavior
-* Assignment operator correctness
-* Self-assignment safety
-* Complex insert/delete sequences
-
-Console output clearly demonstrates correct behavior for each operation.
-
----
-
-## Technologies Used
-
-* **Language:** C++
-* **Paradigm:** Object-Oriented Programming
-* **Concepts:**
-
-  * Balanced Binary Search Trees
-  * Pointers and Dynamic Memory
-  * Recursion
-  * Copy Semantics
-
----
-
-## Notes
-
-* The implementation strictly follows Red-Black Tree rules.
-* Defensive checks and validation functions were added to ensure correctness.
-* Code is written for clarity and correctness over premature optimization.
-
----
-
-
