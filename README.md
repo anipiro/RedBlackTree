@@ -30,8 +30,6 @@ There is no sentinel leaf. A null pointer counts as a black leaf, and the delete
 
 `validacia` checks colors and black counts only. It does not check that the keys are in search-tree order.
 
-Known issue: when the deleted node is black, has no children and is its parent's right child, the fix-up treats the empty position as a left child and stops without recoloring. The tree keeps its ordering but its black counts no longer match, so `validacia` returns `false` afterwards. `Driver.cpp` does not cover this case.
-
 ## Example
 
 From the delete test in `Driver.cpp`:
