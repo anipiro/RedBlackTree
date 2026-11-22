@@ -300,7 +300,7 @@ bool RedBlackTree::washla(int mnsh) {
 void RedBlackTree::shesworebisWashla(Node* x, Node* xMshobeli) {
     while (x != root && (x == nullptr || x->shavia)) {
 
-        if (xMshobeli != nullptr && (x == nullptr || x == xMshobeli->marcxena)) {
+        if (xMshobeli != nullptr && x == xMshobeli->marcxena) {
             Node* w = xMshobeli->marjvena;
 
             if (w == nullptr) {
